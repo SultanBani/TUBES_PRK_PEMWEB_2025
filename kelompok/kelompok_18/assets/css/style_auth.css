@@ -1,0 +1,32 @@
+/* Background khusus halaman login */
+body {
+    background: linear-gradient(135deg, #F6F1EE 0%, #e6ddd8 100%);
+    min-height: 100vh;
+}
+
+/* Mengatur posisi card tepat di tengah */
+.card-login {
+    border-radius: 20px;
+    overflow: hidden; 
+}
+
+.input-group-text {
+    background-color: transparent;
+    border-right: none;
+    color: var(--primary-orange);
+}
+
+.form-control {
+    border-left: none;
+    background-color: #fcfcfc;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: var(--primary-orange);
+}
+
+.input-group:focus-within .input-group-text {
+    border-color: var(--primary-orange);
+    color: var(--secondary-brown);
+}
