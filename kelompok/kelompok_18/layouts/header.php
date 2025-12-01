@@ -1,5 +1,5 @@
 <?php
-// Cek session, kalau belum mulai, kita mulai
+// Cek session
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -23,11 +23,9 @@ $isLoggedIn = isset($_SESSION['status']) && $_SESSION['status'] == 'login';
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-custom navbar-light fixed-top shadow-sm mb-4">
+<nav class="navbar navbar-expand-lg navbar-custom navbar-light fixed-top shadow-sm">
   <div class="container">
-    </div>
-</nav>
-<div class="container" style="min-height: 80vh; margin-top: 100px;">
+    
     <a class="navbar-brand fw-bold" href="<?php echo $base_url; ?>/index.php">
         <i class="fa-solid fa-box-open"></i> X-Bundle
     </a>
@@ -62,13 +60,12 @@ $isLoggedIn = isset($_SESSION['status']) && $_SESSION['status'] == 'login';
 
         <?php else: ?>
             <li class="nav-item">
-                <a class="nav-link btn btn-light text-primary fw-bold btn-sm ms-2 px-3" href="<?php echo $base_url; ?>/auth/login.php">Login</a>
+                <a class="nav-link btn btn-primary text-white fw-bold btn-sm ms-2 px-3" href="<?php echo $base_url; ?>/auth/login.php">Login</a>
             </li>
         <?php endif; ?>
 
       </ul>
     </div>
-  </div>
-</nav>
-
-<div class="container" style="min-height: 80vh;">
+    </div> 
+  </nav> 
+<div class="container" style="min-height: 80vh; margin-top: 100px;">
