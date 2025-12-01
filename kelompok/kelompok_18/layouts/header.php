@@ -23,8 +23,11 @@ $isLoggedIn = isset($_SESSION['status']) && $_SESSION['status'] == 'login';
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+<nav class="navbar navbar-expand-lg navbar-custom navbar-light fixed-top shadow-sm mb-4">
   <div class="container">
+    </div>
+</nav>
+<div class="container" style="min-height: 80vh; margin-top: 100px;">
     <a class="navbar-brand fw-bold" href="<?php echo $base_url; ?>/index.php">
         <i class="fa-solid fa-box-open"></i> X-Bundle
     </a>
