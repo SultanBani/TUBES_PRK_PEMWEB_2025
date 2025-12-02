@@ -1,0 +1,92 @@
+/* assets/css/style_partner.css */
+
+/* === HERO SECTION & SEARCH === */
+.hero-wrapper {
+    background: linear-gradient(135deg, var(--bg-cream) 0%, #e8e1dd 100%);
+    padding: 60px 0 100px 0;
+    border-radius: 0 0 50px 50px;
+    margin-bottom: -50px;
+    position: relative;
+}
+.hero-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(108, 95, 91, 0.1);
+    position: relative;
+    z-index: 10;
+    max-width: 800px;
+    margin: 0 auto 50px auto;
+}
+
+/* === CARD PARTNER === */
+.card-partner {
+    border: none;
+    background: white;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    height: 100%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.card-partner:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(108, 95, 91, 0.15);
+}
+.card-img-top-wrapper {
+    height: 180px;
+    overflow: hidden;
+    position: relative;
+    background: #f8f9fa;
+}
+.card-img-top-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* === REQUEST CARD (INBOX) === */
+.request-card {
+    border-left: 5px solid var(--primary-orange);
+    transition: 0.3s;
+}
+.request-card:hover {
+    background-color: #fdfdfd;
+}
+
+/* === CHAT ROOM STYLES === */
+.chat-box {
+    height: 400px;
+    overflow-y: auto;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+}
+.chat-bubble {
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    max-width: 75%;
+    position: relative;
+    font-size: 0.9rem;
+}
+.chat-sender {
+    background: var(--primary-orange);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 2px;
+}
+.chat-receiver {
+    background: white;
+    color: var(--secondary-brown);
+    border: 1px solid #ddd;
+    margin-right: auto;
+    border-bottom-left-radius: 2px;
+}
+.chat-time {
+    font-size: 0.65rem;
+    opacity: 0.7;
+    margin-top: 5px;
+    display: block;
+    text-align: right;
+}
