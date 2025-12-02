@@ -19,7 +19,7 @@ $isLoggedIn = isset($_SESSION['status']) && $_SESSION['status'] == 'login';
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="/assets/css/style_global.css">
+    <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/style_global.css">
 </head>
 <body>
 
