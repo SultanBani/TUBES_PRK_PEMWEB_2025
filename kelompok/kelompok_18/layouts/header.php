@@ -41,21 +41,32 @@ $isLoggedIn = isset($_SESSION['status']) && $_SESSION['status'] == 'login';
             <a class="nav-link" href="<?php echo $base_url; ?>/index.php">Beranda</a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo $base_url; ?>/produk/katalog.php">Katalog Produk</a>
+        </li>
+
         <?php if ($isLoggedIn): ?>
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo $base_url; ?>/partner/index.php">Cari Partner</a>
             </li>
             
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo $base_url; ?>/produk/index.php">Produk Saya</a>
+                <a class="nav-link" href="<?php echo $base_url; ?>/produk/index.php">Dashboard</a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo $base_url; ?>/voucher/index.php">Laporan</a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link btn btn-danger btn-sm text-white ms-2 px-3" href="<?php echo $base_url; ?>/auth/logout.php">Logout</a>
+            <li class="nav-item dropdown ms-2">
+                <a class="nav-link dropdown-toggle btn btn-outline-primary px-3" href="#" role="button" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-user"></i> Akun
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="<?php echo $base_url; ?>/auth/profil.php">Edit Profil Toko</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="<?php echo $base_url; ?>/auth/logout.php">Logout</a></li>
+                </ul>
             </li>
 
         <?php else: ?>
@@ -66,6 +77,7 @@ $isLoggedIn = isset($_SESSION['status']) && $_SESSION['status'] == 'login';
 
       </ul>
     </div>
-    </div> 
-  </nav> 
+  </div> 
+</nav> 
+
 <div class="container" style="min-height: 80vh; margin-top: 100px;">
