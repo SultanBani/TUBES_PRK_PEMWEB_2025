@@ -1,5 +1,6 @@
+-- Active: 1744639830308@@localhost@3306@db_xbundle
 -- DATABASE X-BUNDLE (FINAL UPDATE DENGAN FITUR CHAT & EXPIRY)
-
+use db_xbundle;
 -- 1. Tabel Users (Ditambah deskripsi & no_hp)
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
