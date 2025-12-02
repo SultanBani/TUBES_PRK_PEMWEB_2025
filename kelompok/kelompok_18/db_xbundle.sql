@@ -52,6 +52,5 @@ CREATE TABLE vouchers (
 );
 
 -- (Opsional) Akun Admin Dummy biar bisa langsung Login
-INSERT INTO users (nama_lengkap, email, password, role) 
-VALUES ('Super Admin', 'admin@xbundle.com', 'admin123', 'admin');
--- Password masih polosan (belum di-hash) buat testing awal doang.
+INSERT INTO users (nama_lengkap, email, password, role, nama_toko) 
+VALUES ('Admin', 'admin@xbundle.com', 'admin123', 'admin', 'Kantor Pusat');
