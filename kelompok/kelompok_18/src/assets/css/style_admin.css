@@ -1,0 +1,131 @@
+/* === HERO SECTION === */
+.hero-section {
+    min-height: 85vh; /* Tinggi minimal hampir satu layar penuh */
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #F6F1EE 0%, #eaddd5 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Badge (Label Kecil di atas Judul) */
+.hero-badge {
+    background-color: #fff;
+    color: #ED7D31;
+    border: 1px solid #ED7D31;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+/* Judul Besar */
+.hero-title {
+    color: #4F4A45;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.text-highlight {
+    color: #ED7D31;
+    position: relative;
+    display: inline-block;
+}
+
+/* Garis bawah artistik pada teks highlight */
+.text-highlight::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    bottom: 5px;
+    left: 0;
+    background-color: rgba(237, 125, 49, 0.2);
+    z-index: -1;
+    border-radius: 5px;
+}
+
+/* Deskripsi Hero */
+.hero-desc {
+    color: #6C5F5B;
+    font-size: 1.15rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+/* Animasi Gambar Melayang */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+.floating-animate {
+    animation: float 6s ease-in-out infinite;
+    max-width: 100%;
+    height: auto;
+}
+
+/* === FITUR SECTION === */
+.feature-section {
+    padding: 5rem 0;
+    background-color: #ffffff;
+}
+
+.feature-card {
+    border: none;
+    border-radius: 15px;
+    padding: 2rem;
+    background: #fff;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(79, 74, 69, 0.1);
+    border-color: #ED7D31;
+}
+
+.feature-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #F6F1EE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem auto;
+    transition: background-color 0.3s;
+}
+
+.feature-card:hover .feature-icon-wrapper {
+    background-color: #ED7D31;
+}
+
+.feature-card:hover .feature-icon-wrapper i {
+    color: #ffffff !important; /* Icon jadi putih pas hover */
+}
+
+/* Judul Section Fitur */
+.section-title {
+    color: #4F4A45;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: #ED7D31;
+    margin: 10px auto 0 auto;
+    border-radius: 2px;
+}
