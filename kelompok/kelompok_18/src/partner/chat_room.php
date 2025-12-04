@@ -9,6 +9,34 @@ if (!$my_id) {
     exit;
 }
 
+// ==========================================
+// LOGIKA TOMBOL KEMBALI (SMART BACK BUTTON)
+// ==========================================
+// Simpan URL asal ke session agar tidak hilang saat reload/kirim pesan
+if (!isset($_SESSION['chat_back_url'])) {
+    $_SESSION['chat_back_url'] = 'my_bundles.php'; // Default fallback
+}
+
+// Deteksi jika user baru masuk dari halaman lain (bukan reload dari chat_room atau proses_partner)
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $ref = $_SERVER['HTTP_REFERER'];
+    // Cek apakah referer BUKAN dari chat_room sendiri atau proses_partner
+    if (strpos($ref, 'chat_room.php') === false && strpos($ref, 'proses_partner.php') === false) {
+        if (strpos($ref, 'index.php') !== false) {
+            $_SESSION['chat_back_url'] = 'index.php';
+        } elseif (strpos($ref, 'request.php') !== false) {
+            $_SESSION['chat_back_url'] = 'request.php';
+        } elseif (strpos($ref, 'history.php') !== false) {
+            $_SESSION['chat_back_url'] = 'history.php';
+        } elseif (strpos($ref, 'my_bundles.php') !== false) {
+            $_SESSION['chat_back_url'] = 'my_bundles.php';
+        }
+    }
+}
+$back_url = $_SESSION['chat_back_url'];
+// ==========================================
+
+
 // 2. Inisialisasi Data
 $partner_id = null;
 $bundle_id  = null;
@@ -54,13 +82,14 @@ if ($bundle_id) {
         
         <div class="chat-header">
             <div class="d-flex align-items-center gap-3">
-                <a href="my_bundles.php" class="text-secondary me-2"><i class="fa fa-arrow-left fa-lg"></i></a>
+                <a href="<?= $back_url ?>" class="text-secondary me-2"><i class="fa fa-arrow-left fa-lg"></i></a>
+                
                 <div class="position-relative">
                     <img src="<?= !empty($partner['foto_profil']) && file_exists('../assets/uploads/'.$partner['foto_profil']) ? '../assets/uploads/'.$partner['foto_profil'] : 'https://ui-avatars.com/api/?name='.urlencode($partner['nama_toko']).'&background=D7CCC8&color=6D4C41' ?>" 
                          class="rounded-circle border" width="45" height="45" style="object-fit: cover;">
                 </div>
                 <div>
-                    <h6 class="mb-0 fw-bold"><?= htmlspecialchars($partner['nama_toko'] ?? '') ?><h6>
+                    <h6 class="mb-0 fw-bold"><?= htmlspecialchars($partner['nama_toko'] ?? '') ?></h6>
                     <div class="partner-status">
                         <span>Online</span>
                     </div>
@@ -86,10 +115,8 @@ if ($bundle_id) {
                     <?php 
                         $isMe = ($c['sender_id'] == $my_id);
                         $time = date('H:i', strtotime($c['created_at']));
-                        // PERBAIKAN ERROR: Tambahkan '?? ""' agar tidak null
                         $pesan_raw = $c['message'] ?? ''; 
                         
-                        // Cek pesan sistem
                         $isSystem = strpos($pesan_raw, 'Halo, saya mengajukan') !== false || strpos($pesan_raw, '[SISTEM]') !== false;
                     ?>
 

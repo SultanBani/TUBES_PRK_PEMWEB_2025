@@ -10,7 +10,6 @@ if (!$my_id) {
 }
 
 // 2. Query Data Kolaborasi Aktif (Status = 'active')
-// Menggunakan CASE WHEN untuk menentukan data partner (lawan bicara)
 $query = "SELECT b.*, 
           CASE 
             WHEN b.pembuat_id = '$my_id' THEN u_mitra.nama_toko 
@@ -37,7 +36,6 @@ $query = "SELECT b.*,
 
 $result = mysqli_query($koneksi, $query);
 
-// Cek error query (untuk debugging jika ada masalah SQL)
 if (!$result) {
     die("Error Database: " . mysqli_error($koneksi));
 }
@@ -62,7 +60,6 @@ if (!$result) {
         <a href="request.php" class="btn-menu">
             <i class="fa fa-envelope"></i> Inbox Request
             <?php 
-            // Cek notifikasi request pending
             $cek = mysqli_query($koneksi, "SELECT id FROM bundles WHERE mitra_id='$my_id' AND status='pending'");
             if(mysqli_num_rows($cek) > 0) echo "<span class='badge bg-danger rounded-pill ms-1'>".mysqli_num_rows($cek)."</span>";
             ?>
@@ -114,7 +111,6 @@ if (!$result) {
                             <span class="text-muted"><?= date('d F Y', strtotime($row['created_at'])) ?></span>
                         </div>
 
-                        <!-- Ajakan Kolaborasi -->
                         <div class="collaboration-cta">
                             <i class="fas fa-comments"></i>
                             <h6 class="mb-1">Mari Berkolaborasi!</h6>
@@ -128,6 +124,13 @@ if (!$result) {
                             <a href="detail.php?bundle_id=<?= $row['id'] ?>" class="btn btn-outline-secondary rounded-pill">
                                 <i class="fa fa-info-circle me-2"></i> Detail Kolaborasi
                             </a>
+                            <form action="proses_partner.php" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan kolaborasi ini? Tindakan ini tidak dapat dibatalkan.');">
+                                <input type="hidden" name="action" value="cancel_bundle">
+                                <input type="hidden" name="bundle_id" value="<?= $row['id'] ?>">
+                                <button type="submit" class="btn btn-sm btn-outline-danger w-100 rounded-pill mt-2">
+                                    <i class="fa fa-times-circle me-2"></i> Batalkan Kolaborasi
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -159,28 +162,3 @@ if (!$result) {
 </div>
 
 <?php include '../layouts/footer.php'; ?>
-
-<script>
-// Optional: Add animation on scroll
-document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.card-partner');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }, index * 100);
-            }
-        });
-    });
-    
-    cards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'all 0.5s ease';
-        observer.observe(card);
-    });
-});
-</script>

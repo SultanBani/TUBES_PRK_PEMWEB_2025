@@ -87,9 +87,14 @@ $result = mysqli_query($koneksi, $query);
                             <?= !empty($row['deskripsi_toko']) ? $row['deskripsi_toko'] : 'Tidak ada deskripsi.' ?>
                         </p>
 
-                        <button class="btn-collab" data-bs-toggle="modal" data-bs-target="#modalAjak<?= $row['id'] ?>">
-                            Ajak Kolaborasi
-                        </button>
+                        <div class="d-grid gap-2">
+                            <button class="btn-collab" data-bs-toggle="modal" data-bs-target="#modalAjak<?= $row['id'] ?>">
+                                Ajak Kolaborasi
+                            </button>
+                            <a href="chat_room.php?partner_id=<?= $row['id'] ?>" class="btn btn-outline-primary btn-sm rounded-pill fw-bold py-2">
+                                <i class="fa fa-comments me-1"></i> Ajak Diskusi
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
