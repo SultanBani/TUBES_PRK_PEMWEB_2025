@@ -129,4 +129,36 @@ if ($action == 'cancel_bundle') {
         echo "<script>alert('Akses ditolak.'); window.location='my_bundles.php';</script>";
     }
 }
+
+// ==========================================
+// 6. BUAT VOUCHER (CREATE VOUCHER) - BARU
+// ==========================================
+if ($action == 'create_voucher') {
+    $bundle_id      = mysqli_real_escape_string($koneksi, $_POST['bundle_id']);
+    $kode_voucher   = strtoupper(mysqli_real_escape_string($koneksi, $_POST['kode_voucher']));
+    $potongan_harga = mysqli_real_escape_string($koneksi, $_POST['potongan_harga']);
+    $kuota_maksimal = mysqli_real_escape_string($koneksi, $_POST['kuota_maksimal']);
+    $expired_at     = mysqli_real_escape_string($koneksi, $_POST['expired_at']);
+
+    // Cek duplikat kode voucher
+    $cek = mysqli_query($koneksi, "SELECT id FROM vouchers WHERE kode_voucher='$kode_voucher'");
+    if (mysqli_num_rows($cek) > 0) {
+        echo "<script>alert('Kode Voucher sudah digunakan! Gunakan kode lain.'); window.history.back();</script>";
+        exit;
+    }
+
+    $query = "INSERT INTO vouchers (bundle_id, kode_voucher, potongan_harga, kuota_maksimal, expired_at, status) 
+              VALUES ('$bundle_id', '$kode_voucher', '$potongan_harga', '$kuota_maksimal', '$expired_at', 'available')";
+
+    if (mysqli_query($koneksi, $query)) {
+        // Kirim notifikasi chat
+        $msg = "[SISTEM] Voucher baru telah dibuat: $kode_voucher (Disc: Rp $potongan_harga)";
+        mysqli_query($koneksi, "INSERT INTO chats (bundle_id, sender_id, message) VALUES ('$bundle_id', '$my_id', '$msg')");
+
+        echo "<script>alert('Voucher berhasil dibuat!'); window.location='detail.php?bundle_id=$bundle_id';</script>";
+    } else {
+        echo "<script>alert('Gagal membuat voucher: " . mysqli_error($koneksi) . "'); window.history.back();</script>";
+    }
+}
 ?>
+
