@@ -1,4 +1,4 @@
--- Active: 1753257938710@@127.0.0.1@3306@db_xbundle
+-- Active: 1744639830308@@localhost@3306@db_xbundle
 -- DATABASE X-BUNDLE
 
 USE db_xbundle;
@@ -61,15 +61,18 @@ CREATE TABLE bundles (
     FOREIGN KEY (produk_mitra_id) REFERENCES products(id)
 );
 
--- 4. CHATS
+-- 4. Tabel Chats (UPDATED: Support File Upload)
 CREATE TABLE chats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     bundle_id INT NOT NULL, 
     sender_id INT NOT NULL, 
     message TEXT NOT NULL,
+    attachment VARCHAR(255) NULL DEFAULT NULL, -- Nama file (misal: struk.jpg)
+    attachment_type ENUM('image', 'file') NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (bundle_id) REFERENCES bundles(id) ON DELETE CASCADE,
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
+);
 );
 
 -- 5. VOUCHERS
