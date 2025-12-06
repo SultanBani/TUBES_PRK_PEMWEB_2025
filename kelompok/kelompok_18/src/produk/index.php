@@ -1,54 +1,88 @@
-<?php 
-// 1. Panggil Koneksi & Header
-include '../config/koneksi.php'; 
-include '../layouts/header.php'; 
+<?php
+session_start();
+require_once '../config/koneksi.php';
 
-// 2. CEK KEAMANAN (PENTING!)
-// Kalau user belum login, tendang balik ke halaman login
-if (!isset($_SESSION['status']) || $_SESSION['status'] != 'login') {
-    echo "<script>alert('Akses Ditolak! Harap Login Dulu.'); location.href='../auth/login.php';</script>";
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../auth/login.php');
     exit;
 }
+
+$user_id = $_SESSION['user_id'];
+$nama_toko = $_SESSION['nama_toko'] ?? 'Toko Saya';
+
+$query = "SELECT * FROM produk WHERE user_id = ? ORDER BY created_at DESC";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+include '../layouts/header.php';
 ?>
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-12">
-            
-            <div class="p-5 mb-4 bg-light rounded-3 shadow-sm border">
-                <div class="container-fluid py-2">
-                    <h1 class="display-5 fw-bold text-primary">Halo, <?php echo $_SESSION['nama']; ?>! 👋</h1>
-                    <p class="col-md-8 fs-4">Selamat datang di Dashboard Toko <strong>"<?php echo $_SESSION['toko']; ?>"</strong>.</p>
-                    
-                    <hr>
-                    
-                    <p>Status Login Anda:</p>
-                    <ul>
-                        <li><strong>User ID:</strong> <?php echo $_SESSION['user_id']; ?></li>
-                        <li><strong>Email:</strong> (Tersimpan di database)</li>
-                        <li><strong>Role:</strong> <?php echo $_SESSION['role']; ?></li>
-                    </ul>
-
-                    <a href="../auth/logout.php" class="btn btn-danger btn-lg mt-3">Test Logout</a>
-                </div>
-            </div>
-
-            <div class="card mt-4">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Area Kerja Person 2 (Produk)</h5>
-                </div>
-                <div class="card-body text-center py-5">
-                    <i class="fa-solid fa-boxes-stacked fa-3x text-muted mb-3"></i>
-                    <h5 class="text-muted">Di sini nanti tempat Tabel CRUD Produk.</h5>
-                    <p class="text-muted">File ini (produk/index.php) nanti akan diedit oleh temanmu.</p>
-                </div>
-            </div>
-
+<div class="produk-container">
+    <div class="produk-header">
+        <div>
+            <h1>Kelola Produk</h1>
+            <p class="subtitle">Toko: <?php echo htmlspecialchars($nama_toko); ?></p>
         </div>
+        <a href="tambah.php" class="btn-primary">+ Tambah Produk</a>
+    </div>
+
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success">
+            <?php 
+            echo $_SESSION['success']; 
+            unset($_SESSION['success']);
+            ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-error">
+            <?php 
+            echo $_SESSION['error']; 
+            unset($_SESSION['error']);
+            ?>
+        </div>
+    <?php endif; ?>
+
+    <div class="produk-grid">
+        <?php if ($result->num_rows > 0): ?>
+            <?php while($row = $result->fetch_assoc()): ?>
+                <div class="produk-card">
+                    <div class="produk-image">
+                        <?php if ($row['gambar']): ?>
+                            <img src="../assets/img/<?php echo htmlspecialchars($row['gambar']); ?>" alt="<?php echo htmlspecialchars($row['nama_produk']); ?>">
+                        <?php else: ?>
+                            <div class="no-image">Tidak ada gambar</div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="produk-content">
+                        <span class="produk-kategori"><?php echo htmlspecialchars($row['kategori']); ?></span>
+                        <h3><?php echo htmlspecialchars($row['nama_produk']); ?></h3>
+                        <p class="produk-deskripsi"><?php echo htmlspecialchars(substr($row['deskripsi'], 0, 80)); ?><?php echo strlen($row['deskripsi']) > 80 ? '...' : ''; ?></p>
+                        <div class="produk-info">
+                            <span class="produk-harga">Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
+                            <span class="produk-satuan">/<?php echo htmlspecialchars($row['satuan']); ?></span>
+                        </div>
+                        <div class="produk-actions">
+                            <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn-edit">Edit</a>
+                            <a href="hapus.php?id=<?php echo $row['id']; ?>" class="btn-delete" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</a>
+                        </div>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <div class="empty-state">
+                <p>Belum ada produk. Yuk tambahkan produk pertamamu!</p>
+                <a href="tambah.php" class="btn-primary">Tambah Produk Sekarang</a>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 
-<?php 
-// 3. Panggil Footer
-include '../layouts/footer.php'; 
+<?php
+$stmt->close();
+$conn->close();
+include '../layouts/footer.php';
 ?>
