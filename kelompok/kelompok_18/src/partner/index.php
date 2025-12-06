@@ -24,7 +24,6 @@ if (isset($_GET['kategori']) && !empty($_GET['kategori'])) {
 $query = "SELECT * FROM users $where ORDER BY id DESC";
 $result = mysqli_query($koneksi, $query);
 ?>
-?>
 
 <link rel="stylesheet" href="../assets/css/style_partner.css">
 
