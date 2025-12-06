@@ -97,3 +97,45 @@ VALUES ('Bani Barista', 'bani@kopi.com', '123456', 'umkm', 'Kopi Pagi', 'Kuliner
 
 INSERT INTO products (user_id, nama_produk, kategori, satuan, harga, stok, deskripsi)
 VALUES (2, 'Es Kopi Susu Gula Aren', 'minuman', 'cup', 18000, 50, 'Kopi susu kekinian.');
+
+
+
+
+
+
+
+-- Matikan pengecekan FK sebentar biar bisa reset data dengan aman
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 1. BERSIHKAN DATA LAMA (Opsional, biar ID mulai dari awal lagi)
+TRUNCATE TABLE vouchers;
+TRUNCATE TABLE chats;
+TRUNCATE TABLE bundles;
+TRUNCATE TABLE products;
+TRUNCATE TABLE users;
+
+-- Nyalakan lagi pengecekan FK
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- 2. INSERT USER (Pemilik Toko)
+-- Kita buat 2 User: Budi (ID 1) dan Siti (ID 2)
+INSERT INTO users (id, nama_lengkap, email, password, role, nama_toko, kategori_bisnis, alamat_toko) VALUES 
+(1, 'Budi Santoso', 'budi@kopi.com', '123456', 'umkm', 'Kopi Senja', 'Kuliner (FnB)', 'Jl. Melati No 1'),
+(2, 'Siti Aminah', 'siti@roti.com', '123456', 'umkm', 'Roti Bunda', 'Kuliner (FnB)', 'Jl. Mawar No 2');
+
+-- 3. INSERT PRODUK (Barang Dagangan)
+-- Produk ID 1 milik Budi (User 1)
+-- Produk ID 2 milik Siti (User 2)
+INSERT INTO products (id, user_id, nama_produk, kategori, satuan, harga, stok, deskripsi, gambar) VALUES 
+(1, 1, 'Es Kopi Susu', 'minuman', 'cup', 18000, 50, 'Kopi susu gula aren kekinian', 'no-image.jpg'),
+(2, 2, 'Roti Bakar Coklat', 'makanan', 'porsi', 15000, 30, 'Roti bakar tebal topping melimpah', 'no-image.jpg');
+
+-- 4. INSERT BUNDLE (Kolaborasi)
+-- Bundle ID 1: Gabungan User 1 & User 2 (Produk 1 + Produk 2)
+-- Status harus 'active' agar muncul di dropdown voucher
+INSERT INTO bundles (id, pembuat_id, mitra_id, produk_pembuat_id, produk_mitra_id, nama_bundle, harga_bundle, status) VALUES 
+(1, 1, 2, 1, 2, 'Paket Sarapan Pagi', 30000, 'active'); 
+
+-- 5. INSERT VOUCHER (Diskon untuk Bundle tadi)
+INSERT INTO vouchers (bundle_id, kode_voucher, potongan_harga, kuota_maksimal, kuota_terpakai, expired_at, status) VALUES
+(1, 'HEMATPAGI', 5000, 100, 0, '2025-12-31', 'available');
