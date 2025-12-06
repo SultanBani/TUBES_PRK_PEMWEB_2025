@@ -1,0 +1,12 @@
+<?php
+$hostname = "localhost:3307";
+$username = "root";
+$password = "";
+$database = "db_xbundle";
+
+$koneksi = mysqli_connect($hostname, $username, $password, $database);
+
+if (!$koneksi) {
+    die("Koneksi Database Gagal: " . mysqli_connect_error());
+}
+?>

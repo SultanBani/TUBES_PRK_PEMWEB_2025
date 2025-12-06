@@ -1,0 +1,77 @@
+:root {
+    --bg-cream: #F6F1EE;
+    --dark-text: #4F4A45;
+    --soft-brown: #6C5F5B;
+    --primary-orange: #ED7D31;
+    --white: #ffffff;
+}
+
+/* container */
+.container-voucher {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.title-page {
+    font-size: 35px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 25px;
+}
+
+/* card */
+.card-voucher {
+    background-color: var(--white);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(79, 74, 69, 0.15);
+}
+
+/* tombol add */
+.btn-add {
+    background: linear-gradient(135deg, #ED7D31, #6C5F5B);
+    color: white;
+    padding: 12px 28px;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    float: right;
+    cursor: pointer;
+    font-size: 15px;
+    margin-bottom: 18px;
+}
+
+/* table */
+.table-voucher {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.table-voucher thead {
+    background-color: var(--dark-text);
+    color: var(--bg-cream);
+}
+
+.table-voucher th, .table-voucher td {
+    padding: 15px;
+    font-size: 15px;
+    text-align: center;
+}
+
+/* hover */
+.table-voucher tbody tr:hover {
+    background-color: rgba(237, 125, 49, 0.12);
+}
+
+/* badge */
+.badge-status {
+    padding: 7px 15px;
+    border-radius: 18px;
+    font-weight: 600;
+}
+.status-available { background:#4CAF50; color:white; }
+.status-used { background:#D9534F; color:white; }
