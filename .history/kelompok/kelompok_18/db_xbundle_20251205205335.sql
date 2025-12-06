@@ -1,4 +1,4 @@
- 1. Tabel Users (Untuk Login Pelapak & Admin)
+isi databasenya ini -- 1. Tabel Users (Untuk Login Pelapak & Admin)
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nama_lengkap VARCHAR(100) NOT NULL,
@@ -45,12 +45,13 @@ CREATE TABLE bundles (
 CREATE TABLE vouchers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     bundle_id INT NOT NULL,
-    kode_unik VARCHAR(20) NOT NULL UNIQUE,
+    kode_unik VARCHAR(20) NOT NULL UNIQUE, -- Misal: XB-KopiRoti-001
     status ENUM('available', 'used') DEFAULT 'available',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expired_at DATE,
     FOREIGN KEY (bundle_id) REFERENCES bundles(id) ON DELETE CASCADE
-);
+    expired_at DATE AFTER created_at,
+    );
+
 
 -- (Opsional) Akun Admin Dummy biar bisa langsung Login
 INSERT INTO users (nama_lengkap, email, password, role) 

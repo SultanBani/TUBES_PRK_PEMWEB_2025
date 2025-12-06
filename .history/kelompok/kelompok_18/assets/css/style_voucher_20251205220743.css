@@ -1,0 +1,144 @@
+:root {
+    --cream: #F6F1EE;
+    --dark: #4F4A45;
+    --brown: #6C5F5B;
+    --orange: #ED7D31;
+    --white: #ffffff;
+}
+
+/* ============ GLOBAL ============ */
+body {
+    background-color: var(--cream);
+    color: var(--dark);
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+/* Container utama */
+.report-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 25px;
+}
+
+/* Judul halaman */
+.title-report {
+    font-size: 36px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+    color: var(--brown);
+    text-transform: uppercase;
+}
+
+/* ============ CARD BOX ============ */
+.card-report {
+    background-color: var(--white);
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(79, 74, 45, 0.15);
+    border: 1px solid rgba(108, 95, 91, 0.25);
+}
+
+/* ============ SEARCH BAR ============ */
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.input-search {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid rgba(108, 95, 91, 0.45);
+    border-radius: 12px;
+    font-size: 15px;
+}
+
+.btn-search {
+    background-color: var(--orange);
+    color: white;
+    padding: 11px 25px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(237, 125, 49, 0.4);
+    transition: .3s ease-in-out;
+}
+
+.btn-search:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 22px rgba(237, 125, 49, 0.55);
+}
+
+/* ============ EXPORT BUTTON ============ */
+.btn-export {
+    display: inline-block;
+    margin-top: -2px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: var(--brown);
+    text-decoration: underline;
+    cursor: pointer;
+    transition: .3s ease;
+}
+.btn-export:hover {
+    color: var(--orange);
+}
+
+/* ============ TABLE STYLE ============ */
+.table-report {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 15px;
+    margin-top: 12px;
+}
+
+.table-report thead {
+    background: linear-gradient(135deg, var(--brown), var(--dark));
+    color: var(--cream);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.table-report th,
+.table-report td {
+    padding: 15px;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(108, 95, 91, 0.25);
+}
+
+.table-report tbody tr:hover {
+    background-color: rgba(237, 125, 49, 0.12);
+    transition: .3s;
+}
+
+/* ============ EMPTY DATA ============ */
+.empty-data {
+    padding: 35px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    opacity: .65;
+    color: var(--brown);
+}
+
+/* ============ BADGE STATUS ============ */
+.badge-success {
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.badge-failed {
+    background-color: #C0392B;
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+}
