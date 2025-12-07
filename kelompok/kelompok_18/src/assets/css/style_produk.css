@@ -1,0 +1,187 @@
+/* === VARIABEL EARTH TONE === */
+:root {
+    --primary-orange: #ED7D31;
+    --dark-brown: #4F4A45;
+    --sage-brown: #6C5F5B;
+    --light-cream: #F6F1EE;
+    --white: #ffffff;
+}
+
+/* === KONTAINER UTAMA === */
+.produk-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.produk-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--light-cream);
+}
+
+.produk-header h2 {
+    color: var(--dark-brown);
+    font-weight: 800;
+}
+
+.subtitle {
+    color: var(--sage-brown);
+    font-size: 14px;
+}
+
+/* === GRID PRODUK === */
+.produk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.produk-card {
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.produk-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(237, 125, 49, 0.15);
+    border-color: var(--primary-orange);
+}
+
+.produk-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #f8f9fa;
+    position: relative;
+}
+
+.produk-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* === KONTEN KARTU === */
+.produk-content {
+    padding: 20px;
+}
+
+.produk-kategori {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--light-cream);
+    color: var(--dark-brown);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.produk-content h3 {
+    color: var(--dark-brown);
+    font-size: 18px;
+    font-weight: 700;
+    margin: 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.produk-harga {
+    color: var(--primary-orange);
+    font-size: 20px;
+    font-weight: 800;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.produk-satuan {
+    font-size: 13px;
+    color: #999;
+    font-weight: normal;
+}
+
+/* === TOMBOL AKSI === */
+.produk-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-edit, .btn-delete {
+    text-align: center;
+    padding: 8px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-edit {
+    background-color: var(--white);
+    border: 1px solid var(--sage-brown);
+    color: var(--sage-brown);
+}
+
+.btn-edit:hover {
+    background-color: var(--sage-brown);
+    color: var(--white);
+}
+
+.btn-delete {
+    background-color: var(--white);
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+.btn-delete:hover {
+    background-color: #dc3545;
+    color: var(--white);
+}
+
+/* === FORM STYLE === */
+.form-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: var(--white);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.form-group label {
+    font-weight: 700;
+    color: var(--dark-brown);
+    margin-bottom: 8px;
+}
+
+.form-control:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 0.2rem rgba(237, 125, 49, 0.25);
+}
+
+.btn-primary-custom {
+    background-color: var(--primary-orange);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-primary-custom:hover {
+    background-color: #d66a20;
+    transform: translateY(-2px);
+}
