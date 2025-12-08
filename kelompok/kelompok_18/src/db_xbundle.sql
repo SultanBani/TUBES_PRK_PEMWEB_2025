@@ -2,7 +2,7 @@
 -- =============================================
 -- DATABASE X-BUNDLE (FINAL STRUCTURE)
 -- =============================================
-
+USE db_xbundle;
 -- 1. HAPUS TABEL LAMA (URUTAN PENTING KARENA RELASI)
 DROP TABLE IF EXISTS vouchers;
 DROP TABLE IF EXISTS chats;
