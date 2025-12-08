@@ -59,7 +59,7 @@ $isLoggedIn = isset($_SESSION['status']) && $_SESSION['status'] == 'login';
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo $base_url; ?>/voucher/index.php">Laporan</a>
+                <a class="nav-link" href="<?php echo $base_url; ?>/voucher/index.php">Voucher</a>
             </li>
 
             <!-- Dropdown Profil -->

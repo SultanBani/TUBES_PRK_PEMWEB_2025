@@ -1,4 +1,4 @@
-/* === FORCE EARTH TONE (Anti-Blue) === */
+/* === ROOT VARIABLES === */
 :root {
     --primary-orange: #ED7D31;   
     --secondary-brown: #6C5F5B;  
@@ -10,41 +10,80 @@
 body {
     background-color: var(--bg-cream);
     color: var(--secondary-brown);
-    font-family: 'Poppins', sans-serif; 
+    font-family: 'Poppins', 'Segoe UI', sans-serif; 
 }
 
-a { color: var(--primary-orange); text-decoration: none; }
-a:hover { color: var(--secondary-brown); }
-
-/* Override Bootstrap Primary (Blue) -> Orange/Brown */
-.btn-primary, .bg-primary, .text-primary {
-    background-color: var(--primary-orange) !important;
-    border-color: var(--primary-orange) !important;
-    color: white !important;
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+    color: var(--dark-text);
+    font-weight: 700;
 }
+
+/* === BUTTON STYLING (GRADIENT) === */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-orange), var(--secondary-brown));
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 50px; 
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(237, 125, 49, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 20px rgba(237, 125, 49, 0.6);
+    background: linear-gradient(135deg, var(--secondary-brown), var(--primary-orange));
+}
+
 .btn-outline-primary {
-    color: var(--primary-orange) !important;
-    border-color: var(--primary-orange) !important;
+    border: 2px solid var(--primary-orange);
+    color: var(--primary-orange);
+    border-radius: 50px;
+    padding: 8px 25px;
 }
+
 .btn-outline-primary:hover {
-    background-color: var(--primary-orange) !important;
-    color: white !important;
-}
-.text-primary { color: var(--primary-orange) !important; }
-
-/* Override Info (Cyan) -> Brown */
-.alert-info, .bg-info, .btn-info {
-    background-color: #EFEBE9 !important; /* Light Brown */
-    color: var(--secondary-brown) !important;
-    border-color: var(--secondary-brown) !important;
+    background-color: var(--primary-orange);
+    color: white;
+    border-color: var(--primary-orange);
 }
 
-/* Navbar Style */
+/* === NAVBAR GLASSMORPHISM === */
 .navbar-custom {
-    background: rgba(255, 255, 255, 0.95); 
-    border-bottom: 2px solid var(--primary-orange);
+    background: rgba(255, 255, 255, 0.85); 
+    backdrop-filter: blur(10px); 
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
-.nav-link.active {
+
+.navbar-brand i {
+    color: var(--primary-orange);
+}
+
+.nav-link {
+    color: var(--secondary-brown) !important;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-link:hover, .nav-link.active {
     color: var(--primary-orange) !important;
-    font-weight: bold;
+}
+
+/* === CARD STYLING === */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(79, 74, 69, 0.1); 
+    background: var(--white);
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px); 
+}
+
+/* === FOOTER === */
+footer {
+    background-color: var(--dark-text);
+    color: var(--bg-cream);
 }
