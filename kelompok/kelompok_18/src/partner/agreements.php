@@ -5,8 +5,6 @@ include '../layouts/header.php';
 $my_id = $_SESSION['id'] ?? $_SESSION['user_id'] ?? null;
 if (!$my_id) { echo "<script>window.location='../auth/login.php';</script>"; exit; }
 
-// QUERY: Hanya ambil bundle yang SUDAH ADA PRODUKNYA (produk_pembuat_id TIDAK NULL)
-// Artinya sudah DEAL.
 $query = "SELECT b.*, 
           u1.nama_toko as toko1, u2.nama_toko as toko2,
           p1.nama_produk as prod1, p1.gambar as img1,
@@ -20,12 +18,51 @@ $query = "SELECT b.*,
           AND b.status = 'active'
           AND b.produk_pembuat_id IS NOT NULL 
           AND b.produk_mitra_id IS NOT NULL
-          ORDER BY b.created_at DESC"; // UBAH updated_at MENJADI created_at
+          ORDER BY b.created_at DESC"; 
 
 $result = mysqli_query($koneksi, $query);
 ?>
 
 <link rel="stylesheet" href="../assets/css/style_partner.css">
+
+<style>
+
+    .menu-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+    .btn-menu {
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    
+    @media (max-width: 768px) {
+        .img-container {
+            height: 180px !important; 
+            border-bottom: 1px solid #eee;
+        }
+        
+        .action-column {
+            border-top: 1px solid #eee; 
+            padding-top: 15px !important;
+            flex-direction: row !important; 
+            gap: 10px;
+        }
+        
+        .border-start-md {
+            border-left: none !important;
+        }
+    }
+
+    @media (min-width: 769px) {
+        .border-start-md {
+            border-left: 1px solid #dee2e6 !important;
+        }
+    }
+</style>
 
 <div class="partner-header">
     <div class="container">
@@ -61,17 +98,16 @@ $result = mysqli_query($koneksi, $query);
     <div class="row g-4">
         <?php if(mysqli_num_rows($result) > 0): ?>
             <?php while($row = mysqli_fetch_assoc($result)): ?>
-            <div class="col-md-12">
-                <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
+            <div class="col-12"> <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
                     <div class="card-body p-0">
                         <div class="row g-0 align-items-center">
                             
-                            <div class="col-md-3 d-flex" style="height: 150px;">
+                            <div class="col-12 col-md-3 d-flex img-container" style="height: 150px;">
                                 <div class="w-50" style="background: url('../assets/img/<?= $row['img1'] ?? 'no-image.jpg' ?>') center/cover;"></div>
                                 <div class="w-50" style="background: url('../assets/img/<?= $row['img2'] ?? 'no-image.jpg' ?>') center/cover; border-left: 2px solid white;"></div>
                             </div>
 
-                            <div class="col-md-7 p-4">
+                            <div class="col-12 col-md-7 p-4">
                                 <h5 class="fw-bold text-dark mb-1"><?= htmlspecialchars($row['nama_bundle']) ?></h5>
                                 <p class="text-muted small mb-2">
                                     Mitra: <span class="fw-bold text-primary">
@@ -79,7 +115,7 @@ $result = mysqli_query($koneksi, $query);
                                     </span>
                                 </p>
                                 
-                                <div class="d-flex gap-3 text-secondary small mb-3">
+                                <div class="d-flex flex-wrap gap-2 gap-md-3 text-secondary small mb-3">
                                     <span><i class="fa-solid fa-box text-success"></i> <?= $row['prod1'] ?></span>
                                     <span>+</span>
                                     <span><i class="fa-solid fa-box text-success"></i> <?= $row['prod2'] ?></span>
@@ -88,13 +124,13 @@ $result = mysqli_query($koneksi, $query);
                                 <h4 class="fw-bold text-danger mb-0">Rp <?= number_format($row['harga_bundle']) ?></h4>
                             </div>
 
-                            <div class="col-md-2 p-3 text-center border-start">
-                                <a href="chat_room.php?bundle_id=<?= $row['id'] ?>" class="btn btn-outline-primary btn-sm rounded-pill w-100 mb-2">
+                            <div class="col-12 col-md-2 p-3 text-center border-start-md action-column d-flex flex-md-column justify-content-center">
+                                <a href="chat_room.php?bundle_id=<?= $row['id'] ?>" class="btn btn-outline-primary btn-sm rounded-pill w-100 mb-0 mb-md-2 flex-fill">
                                     <i class="fa fa-comments"></i> Chat
                                 </a>
                                 
-                                <button type="button" class="btn btn-light text-danger btn-sm rounded-pill w-100" data-bs-toggle="modal" data-bs-target="#modalBatal<?= $row['id'] ?>">
-                                    <i class="fa fa-times-circle"></i> Batalkan
+                                <button type="button" class="btn btn-light text-danger btn-sm rounded-pill w-100 flex-fill" data-bs-toggle="modal" data-bs-target="#modalBatal<?= $row['id'] ?>">
+                                    <i class="fa fa-times-circle"></i> Batal
                                 </button>
                             </div>
 
