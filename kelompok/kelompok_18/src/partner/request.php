@@ -4,7 +4,6 @@ include '../layouts/header.php';
 $my_id = $_SESSION['id'] ?? $_SESSION['user_id'] ?? null;
 if (!$my_id) echo "<script>window.location='../auth/login.php';</script>";
 
-// Query (Sama)
 $query_in = "SELECT b.*, u.nama_toko, u.foto_profil, c.message as pesan_awal
              FROM bundles b 
              JOIN users u ON b.pembuat_id = u.id 
@@ -20,6 +19,42 @@ $res_out = mysqli_query($koneksi, $query_out);
 ?>
 
 <link rel="stylesheet" href="../assets/css/style_partner.css">
+
+<style>
+    .menu-nav {
+        display: flex;
+        flex-wrap: wrap; 
+        justify-content: center;
+        gap: 10px;
+    }
+
+    @media (max-width: 576px) {
+        .request-box {
+            flex-direction: column; 
+            align-items: flex-start !important;
+            text-align: left;
+        }
+        
+        .request-box img {
+            margin-bottom: 15px; 
+        }
+        
+        .request-box .d-flex {
+            width: 100%;
+            margin-top: 15px;
+            justify-content: stretch;
+        }
+        
+        .request-box .btn {
+            flex: 1; 
+        }
+        
+        .btn-menu {
+            font-size: 0.85rem;
+            padding: 8px 15px;
+        }
+    }
+</style>
 
 <div class="partner-header">
     <div class="container">

@@ -1,0 +1,83 @@
+[33m0672b32[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m)[m penambahan perbaikan bisa lebih dari 1 kolaborasi dan penyempurnaan logika backend serta penyempurnaan ui dari halaman chatroom
+[33m8cb1487[m[33m ([m[1;31morigin/dev[m[33m)[m test
+[33m29a7f09[m Merge pull request #6 from SultanBani/fitur/collaboration
+[33m4bd159e[m[33m ([m[1;31morigin/fitur/collaboration[m[33m, [m[1;32mfitur/collaboration[m[33m)[m tambahin fitur untuk agreeements dan mengatur kolaborasi serta perbaiki logika backend
+[33m876e591[m test
+[33mb51eafb[m logo profile
+[33m57586c6[m header
+[33m1339872[m header
+[33m4e5b173[m laman voucher
+[33m9afe11d[m laman voucher
+[33ma12b06f[m header
+[33m27cb3bf[m db
+[33mc292240[m katalog dan klaim voucher
+[33m70ad3f2[m pembaruan fitur partner
+[33m18b4913[m pembaruan fitur gabungan
+[33m2cd5080[m fitur produk
+[33m7b1a595[m fitur produk
+[33mabfcb4c[m fitur voucher
+[33m5bdf5db[m fitur voucher
+[33m0f6370a[m admin panel
+[33mdc266f0[m penanganan error
+[33mcc94b52[m penanganan error
+[33m8e41a8c[m penanganan error
+[33m4aa98cf[m dv
+[33m4885d81[m Merge pull request #3 from SultanBani/fitur/collaboration
+[33m1ee4158[m penambahan untuk bisa kirim file di chat dan juga perbaiki logika filter
+[33mfeebb4d[m Merge branch 'dev' of https://github.com/SultanBani/TUBES_PRK_PEMWEB_2025 into dev
+[33md02d0c1[m db
+[33mbb6fbf8[m tambahin fitur untuk melihat detail yang membuat bisa kolaborasi produk apa saja
+[33m8b2e0b7[m salah kirim
+[33mb204b08[m tambahin fitur untuk melihat detail yang membuat bisa kolaborasi produk apa saja
+[33md788ba1[m pennambahan perbaikan setelah testing seperti logika backend untuk batalkan dan juga untuk frontend index dan bundle
+[33m4680774[m penambahan fitur history
+[33m1dade98[m penambahan fitur chatroom
+[33m13dd491[m perbagus tampilan my_bundles.php
+[33m9dc252d[m admin
+[33m613bb4a[m test
+[33m786db8b[m Merge pull request #2 from SultanBani/fitur/collaboration
+[33md27435b[m admin
+[33m419384b[m penambahan fitur my_bundes.php untuk melihat kolaborasi aktif
+[33m250e0b8[m history
+[33m8137fa9[m db
+[33m5603e6d[m db
+[33m69e9343[m katalog dan login
+[33m63e4eb7[m db dan logika register
+[33m1ca7972[m config
+[33md107563[m --
+[33mca3be0e[m src
+[33mcaadea0[m src
+[33m9bce610[m config
+[33m460de05[m Merge pull request #1 from SultanBani/fitur/collaboration
+[33mb0c7c3d[m Update fitur partner : perbaiki ui interaktif lagi di index dan request sama perbaiki logika backend
+[33mf5f26e4[m Update fitur partner: search dan request system
+[33mec535a6[m header
+[33ma4cc369[m db dan katalog
+[33mc346de5[m update database
+[33m957f181[m katalog
+[33m0abb989[m href
+[33ma128e3c[m test
+[33mdeac4e8[m test
+[33m9d54e70[m[33m ([m[1;31morigin/fitur/auth-layout[m[33m)[m layouts
+[33me3ae601[m database update
+[33made74f7[m tambahan fitur
+[33mc212930[m update database
+[33m9be942f[m update database
+[33m326ed52[m admin
+[33m5a637db[m struktur sementara
+[33m6e1156f[m update header
+[33m279e05e[m landing page
+[33md255b75[m css auth
+[33mc044503[m css utama
+[33mac42e4b[m test login
+[33m0395400[m logic auth
+[33me69cc6d[m auth
+[33m1e10ab5[m[33m ([m[1;31morigin/fitur/produk-management[m[33m)[m db
+[33m0278f53[m db
+[33m9f750e1[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m test
+[33m3380936[m struktur
+[33mf3516a8[m struktur
+[33m23588ca[m sub folder K18 dan readme
+[33m5e35443[m fix(workflow): change pull_request to pull_request_target for better security
+[33m0be799c[m chore(ci): add improvement copywriting at README.md and modify ci
+[33m8fc5d5b[m initial commit

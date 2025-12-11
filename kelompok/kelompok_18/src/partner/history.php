@@ -2,15 +2,12 @@
 include '../config/koneksi.php';
 include '../layouts/header.php';
 
-// 1. Cek Sesi
 $my_id = $_SESSION['id'] ?? $_SESSION['user_id'] ?? null;
 if (!$my_id) {
     echo "<script>window.location='../auth/login.php';</script>";
     exit;
 }
 
-// 2. Query Data History
-// Logika: Ambil data bundle di mana user terlibat, TAPI statusnya sudah selesai/batal/tolak.
 $query = "SELECT b.*, 
           u.nama_toko as mitra_nama, 
           u.foto_profil as mitra_foto,
@@ -30,43 +27,19 @@ $result = mysqli_query($koneksi, $query);
 <link rel="stylesheet" href="../assets/css/style_partner.css?v=<?= time(); ?>">
 
 <style>
-    /* Style Khusus Navigasi Pill (Seperti Gambar) */
-    .nav-pills-custom {
+    .menu-nav {
         display: flex;
         justify-content: center;
-        gap: 15px;
-        margin-bottom: 40px;
-        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap; 
     }
 
-    .nav-link-custom {
-        padding: 10px 25px;
-        border-radius: 50px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-        border: 1px solid #eee;
-        background-color: #fff;
-        color: #555;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    .btn-menu {
+        font-size: 0.9rem;
+        white-space: nowrap; 
     }
 
-    .nav-link-custom:hover {
-        background-color: #f8f9fa;
-        transform: translateY(-2px);
-    }
-
-    .nav-link-custom.active {
-        background-color: var(--primary); /* Orange */
-        color: white;
-        border-color: var(--primary);
-        box-shadow: 0 4px 15px rgba(237, 125, 49, 0.3);
-    }
-
-    /* Style Card History */
     .history-card {
         background: #fff;
         border-radius: 12px;
@@ -82,7 +55,6 @@ $result = mysqli_query($koneksi, $query);
         transform: translateY(-5px);
     }
 
-    /* Garis Status di Kiri Card */
     .status-strip {
         position: absolute;
         left: 0;
@@ -90,9 +62,9 @@ $result = mysqli_query($koneksi, $query);
         bottom: 0;
         width: 6px;
     }
-    .strip-finished { background-color: #4CAF50; } /* Hijau */
-    .strip-rejected { background-color: #F44336; } /* Merah */
-    .strip-cancelled { background-color: #9E9E9E; } /* Abu */
+    .strip-finished { background-color: #4CAF50; } 
+    .strip-rejected { background-color: #F44336; } 
+    .strip-cancelled { background-color: #9E9E9E; } 
 
     .badge-status-history {
         font-size: 0.75rem;
@@ -100,14 +72,25 @@ $result = mysqli_query($koneksi, $query);
         border-radius: 20px;
         font-weight: 700;
     }
+
+    @media (max-width: 576px) {
+        .history-card {
+            padding: 15px;
+        }
+        .partner-header h2 {
+            font-size: 1.5rem;
+        }
+    }
 </style>
 
-<div class="container py-5">
-    
-    <div class="text-center mb-4">
-        <h3 class="fw-bold" style="color: #4F4A45;">Riwayat Kolaborasi</h3>
-        <p class="text-muted">Arsip kolaborasi yang telah selesai atau dibatalkan.</p>
+<div class="partner-header">
+    <div class="container">
+        <h3 class="fw-bold mb-0" style="color: #4F4A45;">Riwayat Kolaborasi</h3>
+        <p class="text-muted mt-2">Arsip kolaborasi yang telah selesai atau dibatalkan.</p>
     </div>
+</div>
+
+<div class="container mb-5" style="max-width: 1200px;">
 
     <div class="menu-nav">
         <a href="index.php" class="btn-menu">
@@ -120,7 +103,7 @@ $result = mysqli_query($koneksi, $query);
             if(mysqli_num_rows($cek) > 0) echo "<span class='badge bg-danger rounded-pill ms-1'>".mysqli_num_rows($cek)."</span>";
             ?>
         </a>
-        <a href="my_bundles.php" class="btn-menu ">
+        <a href="my_bundles.php" class="btn-menu">
             <i class="fa fa-handshake"></i> Kolaborasi Aktif
         </a>
         <a href="agreements.php" class="btn-menu">
@@ -131,11 +114,10 @@ $result = mysqli_query($koneksi, $query);
         </a>
     </div>
 
-    <div class="row g-4">
+    <div class="row g-3 g-md-4">
         <?php if (mysqli_num_rows($result) > 0): ?>
             <?php while ($row = mysqli_fetch_assoc($result)): ?>
                 <?php
-                    // Pengaturan Warna & Label Berdasarkan Status
                     $st = $row['status'];
                     $stripClass = '';
                     $badgeStyle = '';
@@ -155,14 +137,13 @@ $result = mysqli_query($koneksi, $query);
                         $label = 'DIBATALKAN';
                     }
 
-                    // Foto Profil Partner
                     $foto = !empty($row['mitra_foto']) && file_exists('../assets/uploads/'.$row['mitra_foto']) 
                             ? '../assets/uploads/'.$row['mitra_foto'] 
                             : 'https://ui-avatars.com/api/?name='.urlencode($row['mitra_nama']).'&background=D7CCC8&color=6D4C41';
                 ?>
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="history-card">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="history-card h-100">
                         <div class="status-strip <?= $stripClass ?>"></div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">

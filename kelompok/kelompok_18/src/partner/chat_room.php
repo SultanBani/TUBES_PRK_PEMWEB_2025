@@ -6,54 +6,56 @@ include '../layouts/header.php';
 $my_id = $_SESSION['id'] ?? $_SESSION['user_id'] ?? null;
 if (!$my_id) { echo "<script>window.location='../auth/login.php';</script>"; exit; }
 
-// ==========================================
-// LOGIKA TOMBOL KEMBALI (SMART BACK BUTTON)
-// ==========================================
-if (!isset($_SESSION['chat_back_url'])) {
-    $_SESSION['chat_back_url'] = 'my_bundles.php'; 
-}
-if (isset($_SERVER['HTTP_REFERER'])) {
-    $ref = $_SERVER['HTTP_REFERER'];
-    if (strpos($ref, 'chat_room.php') === false && strpos($ref, 'proses_partner.php') === false) {
-        if (strpos($ref, 'index.php') !== false) {
-            $_SESSION['chat_back_url'] = 'index.php';
-        } elseif (strpos($ref, 'request.php') !== false) {
-            $_SESSION['chat_back_url'] = 'request.php';
-        } elseif (strpos($ref, 'history.php') !== false) {
-            $_SESSION['chat_back_url'] = 'history.php';
-        } elseif (strpos($ref, 'my_bundles.php') !== false) {
-            $_SESSION['chat_back_url'] = 'my_bundles.php';
-        }
-    }
-}
-$back_url = $_SESSION['chat_back_url'];
+$back_url = 'my_bundles.php'; 
 
-// 2. Inisialisasi Data
+// 2. LOGIKA MENCARI MASTER BUNDLE (AGAR CHAT MENYATU)
 $partner_id = null;
-$bundle_id  = null;
-$bundle_data = null;
+$bundle_id  = null; // Ini akan diisi ID Master
 
+// Skenario A: Link mengirim bundle_id tertentu
 if (isset($_GET['bundle_id'])) {
     $bid = mysqli_real_escape_string($koneksi, $_GET['bundle_id']);
-    $q_cek = mysqli_query($koneksi, "SELECT * FROM bundles WHERE id='$bid'");
-    $bundle_data = mysqli_fetch_assoc($q_cek);
-    if ($bundle_data) {
-        $bundle_id = $bid;
-        $partner_id = ($bundle_data['pembuat_id'] == $my_id) ? $bundle_data['mitra_id'] : $bundle_data['pembuat_id'];
+    // Cari siapa partner di bundle ini
+    $q_temp = mysqli_query($koneksi, "SELECT pembuat_id, mitra_id FROM bundles WHERE id='$bid'");
+    $d_temp = mysqli_fetch_assoc($q_temp);
+    
+    if($d_temp) {
+        $partner_id = ($d_temp['pembuat_id'] == $my_id) ? $d_temp['mitra_id'] : $d_temp['pembuat_id'];
     }
-} elseif (isset($_GET['partner_id'])) {
+} 
+// Skenario B: Link mengirim partner_id langsung
+elseif (isset($_GET['partner_id'])) {
     $partner_id = mysqli_real_escape_string($koneksi, $_GET['partner_id']);
-    $q_last = mysqli_query($koneksi, "SELECT * FROM bundles WHERE (pembuat_id='$my_id' AND mitra_id='$partner_id') OR (pembuat_id='$partner_id' AND mitra_id='$my_id') ORDER BY created_at DESC LIMIT 1");
-    $bundle_data = mysqli_fetch_assoc($q_last);
-    if ($bundle_data) $bundle_id = $bundle_data['id'];
+}
+
+// JIKA PARTNER KETEMU, CARI MASTER BUNDLE (ID TERKECIL)
+if ($partner_id) {
+    $q_master = mysqli_query($koneksi, "SELECT id FROM bundles 
+                WHERE ((pembuat_id='$my_id' AND mitra_id='$partner_id') OR (pembuat_id='$partner_id' AND mitra_id='$my_id')) 
+                ORDER BY id ASC LIMIT 1");
+    $d_master = mysqli_fetch_assoc($q_master);
+    
+    if ($d_master) {
+        $bundle_id = $d_master['id']; // Selalu gunakan ID Master untuk load chat
+    }
 }
 
 if (!$partner_id) { echo "<script>window.location='index.php';</script>"; exit; }
 
+// Ambil Data Partner
 $partner = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT * FROM users WHERE id='$partner_id'"));
+
+// Ambil Chat History dari Bundle Master
 $chats = ($bundle_id) ? mysqli_query($koneksi, "SELECT * FROM chats WHERE bundle_id='$bundle_id' ORDER BY created_at ASC") : [];
 
-// --- DATA UNTUK MODAL DEAL ---
+// 3. PRE-FETCH GAMBAR PRODUK (Untuk Tampilan Kartu Deal)
+$product_images = [];
+$q_imgs = mysqli_query($koneksi, "SELECT id, gambar FROM products WHERE user_id IN ('$my_id', '$partner_id')");
+while($p = mysqli_fetch_assoc($q_imgs)) {
+    $product_images[$p['id']] = $p['gambar'];
+}
+
+// Data untuk Modal Deal (Formulir)
 $q_prod_me = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM products WHERE user_id='$my_id'");
 $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM products WHERE user_id='$partner_id'");
 ?>
@@ -66,9 +68,8 @@ $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM pro
         <div class="chat-header">
             <div class="d-flex align-items-center gap-3">
                 <a href="<?= $back_url ?>" class="text-secondary me-2"><i class="fa fa-arrow-left fa-lg"></i></a>
-                
                 <div class="position-relative">
-                    <img src="<?= !empty($partner['foto_profil']) && file_exists('../assets/uploads/'.$partner['foto_profil']) ? '../assets/uploads/'.$partner['foto_profil'] : 'https://ui-avatars.com/api/?name='.urlencode($partner['nama_toko']).'&background=D7CCC8&color=6D4C41' ?>" 
+                    <img src="<?= !empty($partner['foto_profil']) ? '../assets/uploads/'.$partner['foto_profil'] : 'https://ui-avatars.com/api/?name='.urlencode($partner['nama_toko']) ?>" 
                          class="rounded-circle border" width="45" height="45" style="object-fit: cover;">
                 </div>
                 <div>
@@ -100,9 +101,9 @@ $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM pro
                         $attachment = $c['attachment'] ?? null;
                         $type = $c['attachment_type'] ?? null;
                         
-                        // Deteksi Tipe Pesan
                         $isSystem = strpos($pesan_raw, '[SISTEM]') !== false;
                         $isDealOffer = strpos($pesan_raw, '[DEAL_PROPOSAL]') === 0;
+                        $isVoucherOffer = strpos($pesan_raw, '[VOUCHER_PROPOSAL]') === 0;
                     ?>
 
                     <?php if($isSystem): ?>
@@ -114,39 +115,91 @@ $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM pro
                         <?php 
                             $json_str = str_replace('[DEAL_PROPOSAL]', '', $pesan_raw);
                             $deal = json_decode($json_str, true);
+                            $img1 = $product_images[$deal['prod_A']] ?? 'no-image.jpg';
+                            $img2 = $product_images[$deal['prod_B']] ?? 'no-image.jpg';
+                            
+                            // [PENTING] Cek Status Accepted
+                            $is_deal_accepted = isset($deal['status']) && $deal['status'] == 'accepted';
                         ?>
                         <div class="message-wrapper justify-content-center my-3">
-                            <div class="card shadow-sm border-warning" style="width: 85%; max-width: 400px; background: #fffbf0; border-radius: 15px;">
+                            <div class="card shadow-sm border-warning" style="width: 90%; max-width: 450px; background: #fffbf0; border-radius: 15px;">
                                 <div class="card-body text-center p-3">
-                                    <div class="mb-2"><i class="fa fa-file-contract text-warning fa-2x"></i></div>
-                                    <h6 class="fw-bold text-dark mb-1">PROPOSAL KESEPAKATAN</h6>
-                                    <p class="text-muted small mb-2">Mitra mengajukan detail bundle baru:</p>
+                                    <div class="mb-2"><i class="fa fa-handshake text-warning fa-2x"></i></div>
+                                    <h6 class="fw-bold text-dark mb-1">PROPOSAL BUNDLING</h6>
                                     
-                                    <div class="bg-white p-2 rounded border mb-3">
+                                    <div class="d-flex align-items-center justify-content-center my-3">
+                                        <div style="width: 60px; height: 60px; background: url('../assets/img/<?= $img1 ?>') center/cover; border-radius: 10px; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"></div>
+                                        <i class="fa fa-plus mx-2 text-muted"></i>
+                                        <div style="width: 60px; height: 60px; background: url('../assets/img/<?= $img2 ?>') center/cover; border-radius: 10px; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"></div>
+                                    </div>
+
+                                    <div class="bg-white p-2 rounded border mb-2">
                                         <h5 class="fw-bold text-primary mb-0"><?= htmlspecialchars($deal['nama_bundle']) ?></h5>
                                         <div class="text-success fw-bold">Rp <?= number_format($deal['harga']) ?></div>
                                     </div>
 
                                     <?php if(!empty($deal['catatan'])): ?>
-                                        <div class="alert alert-light border small text-muted fst-italic py-2">"<?= htmlspecialchars($deal['catatan']) ?>"</div>
+                                        <div class="small text-muted fst-italic mb-3">"<?= htmlspecialchars($deal['catatan']) ?>"</div>
                                     <?php endif; ?>
 
-                                    <?php if (!$isMe): ?>
+                                    <?php if($is_deal_accepted): ?>
+                                        <button class="btn btn-light border rounded-pill px-4 w-100 text-success fw-bold" disabled>
+                                            <i class="fa fa-check-double me-1"></i> Telah Disetujui
+                                        </button>
+                                    <?php elseif (!$isMe): ?>
                                         <form action="proses_partner.php" method="POST">
                                             <input type="hidden" name="action" value="accept_deal_proposal">
                                             <input type="hidden" name="chat_id" value="<?= $c['id'] ?>">
                                             <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold w-100 shadow-sm">
-                                                <i class="fa fa-check-circle me-1"></i> Setujui Kesepakatan
+                                                <i class="fa fa-check-circle me-1"></i> Setujui Deal
                                             </button>
                                         </form>
                                     <?php else: ?>
                                         <button class="btn btn-secondary rounded-pill px-4 w-100" disabled>
-                                            <i class="fa fa-clock me-1"></i> Menunggu Persetujuan...
+                                            <i class="fa fa-clock me-1"></i> Menunggu Persetujuan Mitra...
                                         </button>
                                     <?php endif; ?>
                                 </div>
-                                <div class="card-footer bg-transparent border-warning text-muted small text-center py-1">
-                                    Diajukan: <?= date('d M, H:i', strtotime($c['created_at'])) ?>
+                            </div>
+                        </div>
+
+                    <?php elseif($isVoucherOffer): ?>
+                        <?php 
+                            $json_v = str_replace('[VOUCHER_PROPOSAL]', '', $pesan_raw);
+                            $v = json_decode($json_v, true);
+                            
+                            // [PENTING] Cek Status Accepted
+                            $is_voucher_accepted = isset($v['status']) && $v['status'] == 'accepted';
+                        ?>
+                        <div class="message-wrapper justify-content-center my-3">
+                            <div class="card shadow-sm border-primary" style="width: 90%; max-width: 400px; background: #f0f7ff; border-radius: 15px;">
+                                <div class="card-body text-center p-3">
+                                    <div class="mb-2"><i class="fa fa-ticket-alt text-primary fa-2x"></i></div>
+                                    <h6 class="fw-bold text-dark mb-1">USULAN VOUCHER</h6>
+                                    <p class="small text-muted mb-2">Untuk Paket: <strong><?= htmlspecialchars($v['nama_bundle']) ?></strong></p>
+                                    
+                                    <div class="bg-white border p-3 rounded mb-3" style="border: 2px dashed #0d6efd !important;">
+                                        <h3 class="fw-bold text-primary mb-0 ls-2"><?= htmlspecialchars($v['kode']) ?></h3>
+                                        <div class="small text-muted mt-1">Diskon: Rp <?= number_format($v['potongan']) ?></div>
+                                    </div>
+
+                                    <?php if($is_voucher_accepted): ?>
+                                        <button class="btn btn-light border rounded-pill px-4 w-100 text-primary fw-bold" disabled>
+                                            <i class="fa fa-check-double me-1"></i> Voucher Aktif
+                                        </button>
+                                    <?php elseif (!$isMe): ?>
+                                        <form action="proses_partner.php" method="POST">
+                                            <input type="hidden" name="action" value="accept_voucher_proposal">
+                                            <input type="hidden" name="chat_id" value="<?= $c['id'] ?>">
+                                            <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold w-100 shadow-sm">
+                                                <i class="fa fa-check me-1"></i> Setujui Voucher
+                                            </button>
+                                        </form>
+                                    <?php else: ?>
+                                        <button class="btn btn-secondary rounded-pill px-4 w-100" disabled>
+                                            <i class="fa fa-clock me-1"></i> Menunggu Persetujuan Mitra...
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +207,6 @@ $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM pro
                     <?php else: ?>
                         <div class="message-wrapper <?= $isMe ? 'me' : 'them' ?>">
                             <div class="message-bubble">
-                                
                                 <?php if($attachment): ?>
                                     <div class="mb-2">
                                         <?php if($type == 'image'): ?>
@@ -170,12 +222,8 @@ $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM pro
                                         <?php endif; ?>
                                     </div>
                                 <?php endif; ?>
-
                                 <?= nl2br(htmlspecialchars($pesan_raw)) ?>
-
-                                <span class="msg-time">
-                                    <?= $time ?> <?= $isMe ? '<i class="fa fa-check-double ms-1"></i>' : '' ?>
-                                </span>
+                                <span class="msg-time"><?= $time ?> <?= $isMe ? '<i class="fa fa-check-double ms-1"></i>' : '' ?></span>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -196,17 +244,12 @@ $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM pro
 
                 <?php if($bundle_id): ?>
                     <input type="file" name="attachment" id="fileInput" style="display: none;" onchange="previewFile()">
-                    
                     <button type="button" class="btn btn-light rounded-circle text-muted border position-relative" style="width: 45px; height: 45px;" onclick="document.getElementById('fileInput').click()">
                         <i class="fa fa-paperclip"></i>
                         <span id="fileIndicator" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" style="display: none;"></span>
                     </button>
-
                     <input type="text" name="message" class="input-msg" placeholder="Ketik pesan..." autocomplete="off">
-                    
-                    <button type="submit" class="btn-send">
-                        <i class="fa fa-paper-plane"></i>
-                    </button>
+                    <button type="submit" class="btn-send"><i class="fa fa-paper-plane"></i></button>
                 <?php else: ?>
                     <input type="text" class="input-msg bg-light" placeholder="Buat bundle dulu..." disabled>
                     <button type="button" class="btn-send bg-secondary" disabled><i class="fa fa-lock"></i></button>
@@ -221,7 +264,6 @@ $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM pro
                 <i class="fa fa-times text-danger cursor-pointer ms-2" onclick="cancelFile()" style="cursor: pointer;"></i>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -255,12 +297,13 @@ $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM pro
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form action="proses_partner.php" method="POST">
-                <input type="hidden" name="action" value="propose_deal"> <input type="hidden" name="bundle_id" value="<?= $bundle_id ?>">
+                <input type="hidden" name="action" value="propose_deal"> 
+                <input type="hidden" name="bundle_id" value="<?= $bundle_id ?>"> 
                 
                 <div class="modal-body bg-light">
                     <div class="mb-3">
                         <label class="fw-bold small">Nama Paket Bundle</label>
-                        <input type="text" name="nama_bundle" class="form-control rounded-pill" value="<?= htmlspecialchars($bundle_data['nama_bundle'] ?? '') ?>" required>
+                        <input type="text" name="nama_bundle" class="form-control rounded-pill" value="Paket Baru" required>
                     </div>
 
                     <div class="row">
@@ -292,8 +335,7 @@ $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM pro
                         <label class="fw-bold small">Harga Total (Deal)</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white">Rp</span>
-                            <input type="number" name="harga_bundle" class="form-control fw-bold text-success" 
-                                   value="<?= $bundle_data['harga_bundle'] > 0 ? $bundle_data['harga_bundle'] : '' ?>" required>
+                            <input type="number" name="harga_bundle" class="form-control fw-bold text-success" required>
                         </div>
                     </div>
 
@@ -313,23 +355,18 @@ $q_prod_partner = mysqli_query($koneksi, "SELECT id, nama_produk, harga FROM pro
 </div>
 
 <script>
-    // Auto Scroll
     const chatBox = document.getElementById("chatBox");
     if(chatBox) chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Preview File
     function previewFile() {
         const fileInput = document.getElementById('fileInput');
         const fileName = fileInput.files[0] ? fileInput.files[0].name : '';
-        
         if (fileName) {
             document.getElementById('fileIndicator').style.display = 'block';
             document.getElementById('filePreviewArea').style.display = 'block';
             document.getElementById('fileNameDisplay').innerText = fileName;
         }
     }
-
-    // Cancel File
     function cancelFile() {
         document.getElementById('fileInput').value = ""; 
         document.getElementById('fileIndicator').style.display = 'none';

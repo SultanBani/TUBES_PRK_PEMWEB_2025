@@ -5,19 +5,17 @@ include '../layouts/header.php';
 $my_id = $_SESSION['id'] ?? $_SESSION['user_id'] ?? null;
 if (!$my_id) echo "<script>window.location='../auth/login.php';</script>";
 
-// Default Query
 $where = "WHERE role='umkm' AND id != '$my_id'";
 
-// 1. Cari Nama Toko (Search)
+// Cari Nama Toko (Search)
 if (isset($_GET['q']) && !empty($_GET['q'])) {
     $q = mysqli_real_escape_string($koneksi, $_GET['q']);
     $where .= " AND (nama_toko LIKE '%$q%' OR nama_lengkap LIKE '%$q%')";
 }
 
-// 2. Filter Kategori (Dropdown) -- PERBAIKAN DI SINI
+// Filter Kategori (Dropdown)
 if (isset($_GET['kategori']) && !empty($_GET['kategori'])) {
     $kat = mysqli_real_escape_string($koneksi, $_GET['kategori']);
-    // Gunakan LIKE agar lebih fleksibel (misal: 'Kuliner (FnB)' akan kena jika dicari 'FnB')
     $where .= " AND kategori_bisnis LIKE '%$kat%'"; 
 }
 
@@ -26,6 +24,21 @@ $result = mysqli_query($koneksi, $query);
 ?>
 
 <link rel="stylesheet" href="../assets/css/style_partner.css">
+
+<style>
+    .menu-nav {
+        flex-wrap: wrap; 
+        gap: 10px;
+    }
+    
+    .btn-menu {
+        white-space: nowrap;
+    }
+    
+    @media (max-width: 768px) {
+        .card-partner { margin-bottom: 15px; }
+    }
+</style>
 
 <div class="partner-header">
     <div class="container">
@@ -50,7 +63,7 @@ $result = mysqli_query($koneksi, $query);
 
 <div class="container mb-5">
     
-    <div class="menu-nav">
+    <div class="menu-nav d-flex justify-content-center">
         <a href="index.php" class="btn-menu active">
             <i class="fa fa-store"></i> Jelajahi Mitra
         </a>
@@ -76,15 +89,15 @@ $result = mysqli_query($koneksi, $query);
         <?php if(mysqli_num_rows($result) > 0): ?>
             <?php while($row = mysqli_fetch_assoc($result)): ?>
             <div class="col-md-6 col-lg-3">
-                <div class="card-partner">
+                <div class="card-partner h-100 shadow-sm border">
                     <div class="card-img-wrapper">
                         <img src="<?= !empty($row['foto_profil']) ? '../assets/uploads/'.$row['foto_profil'] : 'https://ui-avatars.com/api/?name='.urlencode($row['nama_toko']).'&background=random' ?>">
                         <div class="card-category"><?= htmlspecialchars($row['kategori_bisnis'] ?? 'Umum') ?></div>
                     </div>
                     
                     <div class="card-body-custom">
-                        <h5 class="fw-bold mb-1 text-dark"><?= htmlspecialchars($row['nama_toko']) ?></h5>
-                        <p class="small text-muted mb-2">
+                        <h5 class="fw-bold mb-1 text-dark text-truncate"><?= htmlspecialchars($row['nama_toko']) ?></h5>
+                        <p class="small text-muted mb-2 text-truncate">
                             <i class="fa fa-map-marker-alt text-danger me-1"></i> <?= htmlspecialchars($row['alamat_toko'] ?? '-') ?>
                         </p>
                         
