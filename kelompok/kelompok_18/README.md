@@ -54,7 +54,7 @@ Aplikasi ini dibangun menggunakan PHP Native sebagai Backend, HTML5, CSS3, dan J
         $database = "db_xbundle"; 
         $base_url = "http://localhost/TUBES_PRK_PEMWEB_2025/kelompok/kelompok_18/src/";
         ```
-    * Jika pengaturan database Anda berbeda dari default (misalnya, Anda menggunakan password), harap sesuaikan nilai `$username` dan `$password` di file tersebut.
+    * Jika pengaturan database berbeda dari default (misalnya menggunakan password), harap sesuaikan `$username` dan `$password` di file tersebut.
 
 4.  **Akses Aplikasi:**
     * Buka browser dan akses URL:
@@ -70,8 +70,54 @@ Aplikasi ini dibangun menggunakan PHP Native sebagai Backend, HTML5, CSS3, dan J
 
 
 ## Tampilan Website ##
+
+## Administrasi ##
+![alt text](Tampilan-Web/adm1.png)
+![alt text](Tampilan-Web/adm2.png)
+
+
+
 ### Role Umum ###
 ![alt text](Tampilan-Web/umum1.png)
 ![alt text](Tampilan-Web/umum2.png)
 ![alt text](Tampilan-Web/umum3.png)
 ![alt text](Tampilan-Web/umum4.png)
+
+
+
+## Role Admin ##
+![alt text](Tampilan-Web/admin1.png)
+![alt text](Tampilan-Web/admin2.png)
+![alt text](Tampilan-Web/admin3.png)
+![alt text](Tampilan-Web/admin4.png)
+
+
+
+## Role Mitra UMKM ##
+![alt text](Tampilan-Web/umkm1.png)
+![alt text](Tampilan-Web/umkm2.png)
+![alt text](Tampilan-Web/umkm3.png)
+![alt text](Tampilan-Web/umkm4.png)
+![alt text](Tampilan-Web/umkm5.png)
+![alt text](Tampilan-Web/umkm6.png)
+![alt text](Tampilan-Web/umkm7.png)
+![alt text](Tampilan-Web/umkm8.png)
+![alt text](Tampilan-Web/umkm9.png)
+![alt text](Tampilan-Web/umkm10.png)
+![alt text](Tampilan-Web/umkm11.png)
+![alt text](Tampilan-Web/umkm12.png)
+![alt text](Tampilan-Web/umkm13.png)
+![alt text](Tampilan-Web/umkm14.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
